@@ -1,7 +1,18 @@
 {
-  "welcome": "Welcome",
+  "welcome": "Welcome to the Maze",
   "home": "Home",
   "404": "Not Found",
   "loading": "loading",
-  "error": "Something went wrong"
+  "error": "Something went wrong",
+  "genres": "Genres",
+  "reset": "Reset",
+  "sortByRating": "Sort by Rating {direction}",
+  "shows": "Shows",
+  "language": "Language: {language}",
+  "runtime": "Runtime: { runtime } min",
+  "premiered": "Premiered: {premiered}",
+  "ended": "Ended: {ended}",
+  "network": "Network: {network} {country}",
+  "showtime": "Showtime: {showtime}",
+  "rating": "Rating: Unrated | Rating: {rating}"
 }

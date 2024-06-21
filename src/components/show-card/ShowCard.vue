@@ -18,7 +18,9 @@ defineProps<{ show: APIResponse }>();
       <div class="image" v-else />
       <figcaption>{{ show.name }}</figcaption>
     </figure>
-    <span>Rating: {{ show.rating.average ?? "Unrated" }}</span>
+    <span>{{
+      $t("rating", { rating: show.rating.average }, show.rating.average)
+    }}</span>
   </RouterLink>
 </template>
 

@@ -8,37 +8,131 @@ const route = useRoute();
 const showsStore = useShowsStore();
 const { getShowById } = storeToRefs(showsStore);
 const show = ref(getShowById.value(+route.params.showId));
+
+const ctas = [
+  {
+    name: show.value?.name,
+    img: "https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg",
+    href: `https://www.imdb.com/title/${show.value?.externals.imdb}`,
+    label: "imdb",
+  },
+  {
+    name: "TVMaze",
+    img: "https://static.tvmaze.com/images/tvm-header-logo.png",
+    href: show.value?.url,
+    label: "TVMaze",
+  },
+];
 </script>
 
 <template>
-  <section>
-    <h1 class="title">{{ show?.name }}</h1>
-    <p class="runtime" v-if="show?.averageRuntime">
-      Runtime: {{ show?.averageRuntime }} min
-    </p>
-    <p class="ended" v-if="show?.ended">Ended: {{ show?.ended }}</p>
-    <p class="summary" v-if="show?.summary" v-html="show?.summary" />
-    <a
-      class="imdb-cta"
-      rel="noreferrer"
-      target="_blank"
-      :href="`https://www.imdb.com/title/${show?.externals.imdb}`"
-      aria-label="IMDB"
-    >
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"
-        alt=""
-        aria-hidden="true"
-      />
-    </a>
+  <section class="show-section">
+    <h1 :id="show?.name" class="title">{{ show?.name }}</h1>
+    <div class="info-stats">
+      <picture>
+        <source :srcset="show?.image.medium" media="(orientation: portrait)" />
+        <img class="show-image" :src="show?.image.original" :alt="show?.name" />
+      </picture>
+      <p class="language" v-if="show?.language">
+        {{ $t("language", { language: show?.language }) }}
+      </p>
+      <p class="runtime" v-if="show?.averageRuntime">
+        {{ $t("runtime", { runtime: show?.averageRuntime }) }}
+      </p>
+      <div class="run">
+        <p class="premiered" v-if="show?.premiered">
+          {{ $t("premiered", { premiered: show?.premiered }) }}
+        </p>
+        <p class="ended" v-if="show?.ended">
+          {{ $t("ended", { ended: show?.ended }) }}
+        </p>
+      </div>
+      <p
+        class="network"
+        v-if="show?.network?.name && show?.network?.country.name"
+      >
+        {{
+          $t("network", {
+            network: show?.network?.name,
+            country: show?.network?.country.name,
+          })
+        }}
+      </p>
+      <div>
+        {{ $t("showtime", { showtime: show?.schedule.time }) }}
+        <span v-for="(day, index) in show?.schedule.days" :key="day">
+          {{ day }}
+          {{ index || index === show?.schedule.days.length ? +"," : "" }}
+        </span>
+      </div>
+    </div>
+    <div class="info-core">
+      <p class="summary" v-if="show?.summary" v-html="show?.summary" />
+      <div class="external-links">
+        <a
+          class="cta"
+          rel="noreferrer"
+          target="_blank"
+          :href="cta.href"
+          :aria-label="cta.label"
+          v-for="cta in ctas"
+          :key="cta.name"
+        >
+          <img :src="cta.img" alt="" aria-hidden="true" />
+        </a>
+      </div>
+    </div>
   </section>
 </template>
 
 <style lang="scss" scoped>
-.imdb-cta {
+.show-section {
+  display: grid;
+  grid-template-areas:
+    "title title title title"
+    "core core core stats";
+
+  @media screen and (min-width: 600px) {
+    grid-template-areas:
+      "title title"
+      "core stats stats";
+  }
+}
+
+.info-stats {
+  background: #f4f4f4;
+  grid-area: stats;
+  padding: 1rem;
+  border-radius: 0.25rem;
+}
+
+.info-core {
+  grid-area: core;
+  padding-inline-start: 1rem;
+  padding-inline-end: 1rem;
+}
+
+.title {
+  grid-area: title;
+}
+
+.show-image {
+  border-radius: 0.5rem;
+}
+
+.external-links {
   display: flex;
+
+  img {
+    object-fit: contain;
+  }
+}
+
+.cta {
+  display: flex;
+  margin: 0.5rem;
   width: 3rem;
-  filter: saturate(75%);
+  filter: saturate(70%);
 
   &:hover {
     filter: saturate(100%);

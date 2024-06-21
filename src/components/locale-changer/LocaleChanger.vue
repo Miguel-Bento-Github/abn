@@ -23,3 +23,5 @@ watch(locale as Ref<LocaleCode>, (newValue) => {
     </option>
   </select>
 </template>
+
+<style lang="scss" scoped></style>

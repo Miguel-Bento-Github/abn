@@ -1,134 +1,97 @@
 <script setup lang="ts">
+import GenreSelector from "@/components/genre-selector/GenreSelector.vue";
 import ShowCard from "@/components/show-card/ShowCard.vue";
-import { useShowsQuery } from "@/queries/useFetchQuery";
 import type { APIResponse } from "@/services/http/types";
 import { useShowsStore } from "@/stores/useShowsStore";
-import { computed, ref, watch } from "vue";
+import { ref, watch, watchEffect } from "vue";
 
 const isSortDescending = ref(false);
 const initialModelState: string[] = [];
 const genresModel = ref<APIResponse["genres"]>(initialModelState);
 const resetGenresModel = () => (genresModel.value = initialModelState);
 
-const {
-  isLoading,
-  isError,
-  data: shows,
-  isSuccess,
-} = useShowsQuery("shows?page=1");
-
 const showsStore = useShowsStore();
 
-/**
- * A computed property that returns a list of active shows, sorted and filtered based on certain criteria.
- *
- * The list is initially sliced to the top 5 shows. If no genres are selected in the `genresModel`,
- * the list is sorted based on the average rating, either in descending or ascending order,
- * depending on the value of `isSortDescending`.
- *
- * If genres are selected, the list is filtered to include only shows that match the selected genres
- * before being sorted.
- */
-const activeShows = computed(() => {
-  const sortCallback = <T extends APIResponse>(a: T, b: T) =>
-    isSortDescending.value
-      ? a.rating.average - b.rating.average
-      : b.rating.average - a.rating.average;
+const shows = showsStore.shows?.slice(0, 5);
+const activeShows = ref(shows);
 
-  let shows = showsStore.shows?.slice(0, 5);
-  if (!genresModel.value.length) return shows?.sort(sortCallback);
+watchEffect(() => {
+  if (!genresModel.value.length) {
+    activeShows.value = shows;
+    return;
+  }
 
-  shows = showsStore.shows?.filter((show) =>
+  activeShows.value = showsStore.shows?.filter((show) =>
     show.genres.some((genre) => genresModel.value.includes(genre))
   );
-
-  return shows?.sort(sortCallback);
 });
 
-watch(isSuccess, () => {
-  showsStore.$patch({
-    shows: shows.value,
+watch(isSortDescending, () => {
+  activeShows.value = activeShows.value?.sort((a, b) => {
+    return isSortDescending.value
+      ? a.rating.average - b.rating.average
+      : b.rating.average - a.rating.average;
   });
 });
 
-const sortByRating = () => {
-  isSortDescending.value = !isSortDescending.value;
-};
+const userInput = ref("");
+watch(userInput, (text) => {
+  activeShows.value = showsStore.getShowsByName(text);
+});
 </script>
 
 <template>
-  <h1>{{ $t("welcome") }}</h1>
-  <p :aria-busy="isLoading">
-    <TransitionGroup name="content">
-      <span key="loading" v-if="isLoading"> {{ $t("loading") }}</span>
-      <div key="error" v-if="isError">{{ $t("error") }}</div>
+  <input
+    class="show-filter"
+    type="text"
+    v-model="userInput"
+    placeholder="input show name here..."
+  />
+  <div data-cy="home-content">
+    <section>
+      <h2 class="genres-title">{{ $t("genres") }}</h2>
+      <GenreSelector v-model="genresModel" />
 
-      <div key="not-loading" data-cy="home-content" v-else>
-        <section>
-          <h2>Genres</h2>
-          <div class="genre-selection">
-            <label v-for="genre in showsStore.genres" :key="genre" :for="genre">
-              <input
-                type="checkbox"
-                true-value="yes"
-                false-value="no"
-                v-model="genresModel"
-                :id="genre"
-                :value="genre"
-              />
-              {{ genre }}
-            </label>
-          </div>
+      <button type="button" class="genre-reset" @click="resetGenresModel()">
+        {{ $t("reset") }}
+      </button>
 
-          <button class="genre-reset" type="button" @click="resetGenresModel()">
-            Reset
-          </button>
-
-          <div class="rating-control">
-            <button type="button" class="sort" @click="sortByRating">
-              Sort by Rating {{ isSortDescending ? "↑" : "↓" }}
-            </button>
-          </div>
-        </section>
-
-        <div key="active-show">
-          <h2>Shows</h2>
-          <div class="show-cards">
-            <TransitionGroup name="list">
-              <ShowCard
-                :show="activeShow"
-                v-for="activeShow in activeShows"
-                :key="activeShow.id"
-              />
-            </TransitionGroup>
-          </div>
-        </div>
+      <div class="rating-control">
+        <button
+          type="button"
+          class="sort"
+          @click="isSortDescending = !isSortDescending"
+        >
+          {{
+            $t("sortByRating", {
+              direction: isSortDescending ? "↑" : "↓",
+            })
+          }}
+        </button>
       </div>
-    </TransitionGroup>
-  </p>
+    </section>
+
+    <div class="show-cards-wrapper" key="active-show">
+      <h2 class="show-cards-title">{{ $t("shows") }}</h2>
+      <div class="show-cards">
+        <TransitionGroup name="list">
+          <ShowCard
+            :show="activeShow"
+            v-for="activeShow in activeShows"
+            :key="activeShow.id"
+          />
+        </TransitionGroup>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.list-move,
-.list-enter-active {
-  transition: all 0.5s ease;
-}
-
-.list-leave-active,
-.list-leave-to {
-  transition: all 0s;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  z-index: -1;
-  transform: translateX(-4rem);
-}
-
-.list-leave-active {
-  position: absolute;
-  opacity: 0;
+.show-filter {
+  padding: 0.5rem 1rem;
+  border: 0;
+  box-shadow: inset 2px 2px 4px #999;
+  border-radius: 0.25rem;
 }
 
 .rating-control {
@@ -159,6 +122,36 @@ const sortByRating = () => {
   display: block;
   margin-inline-start: auto;
   margin-right: 1rem;
+}
+
+.show-cards-title,
+genres-title {
+  padding-inline-start: 1rem;
+}
+
+%curtain {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  width: 0.5rem;
+  height: 100%;
+  z-index: 1;
+}
+
+.show-cards-wrapper {
+  position: relative;
+
+  &::after {
+    @extend %curtain;
+    inset-inline-start: 0;
+    background: linear-gradient(to left, transparent, #fff);
+  }
+
+  &::before {
+    @extend %curtain;
+    inset-inline-end: 0;
+    background: linear-gradient(to right, transparent, #fff);
+  }
 }
 
 .show-cards {

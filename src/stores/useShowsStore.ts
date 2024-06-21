@@ -22,5 +22,11 @@ export const useShowsStore = defineStore({
       return (showId: number) =>
         state.shows?.find((show) => show.id === showId);
     },
+    getShowsByName: (state) => {
+      return (showName: string) =>
+        state.shows?.filter((show) =>
+          show.name.toLocaleLowerCase().includes(showName.toLocaleLowerCase())
+        );
+    },
   },
 });
