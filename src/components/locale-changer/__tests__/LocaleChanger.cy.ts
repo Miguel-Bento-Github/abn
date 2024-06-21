@@ -1,6 +1,6 @@
 import { createPinia } from "pinia";
 import i18n from "@/plugins/i18n";
-import LocaleChanger from "../LocaleChanger.vue";
+import LocaleChanger from "../locale-changer/LocaleChanger.vue";
 import { LocaleCode } from "@/const/locale";
 
 describe("Locale Changes", () => {

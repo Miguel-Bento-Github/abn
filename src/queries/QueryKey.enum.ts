@@ -1,3 +1,3 @@
 export enum QueryKey {
-  Product = "Product",
+  Show = "Show",
 }

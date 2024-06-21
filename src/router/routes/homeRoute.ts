@@ -6,12 +6,4 @@ export const homeRoute = {
   path: "/",
   alias: "/home",
   component: HomeView,
-  meta: {
-    metaTags: [
-      {
-        name: "description",
-        content: "content",
-      },
-    ],
-  },
 };
