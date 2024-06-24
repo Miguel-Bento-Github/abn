@@ -67,9 +67,12 @@ const ctas = [
       </p>
       <div data-cy="show-showtime">
         {{ $t("showtime", { showtime: show?.schedule.time }) }}
+
         <span v-for="(day, index) in show?.schedule.days" :key="day">
-          {{ day }}
-          {{ index || index === show?.schedule.days.length ? +"," : "" }}
+          <span v-if="show?.schedule.days">
+            {{ day
+            }}{{ index === show?.schedule.days.length - 1 ? "" : ", " }}</span
+          >
         </span>
       </div>
     </div>

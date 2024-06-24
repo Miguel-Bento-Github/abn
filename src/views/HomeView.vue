@@ -55,27 +55,25 @@ watch(userInput, (text) => {
 
       <button
         type="button"
-        class="genre-reset"
+        class="genre-control"
         data-cy="genre-reset"
         @click="resetGenresModel()"
       >
         {{ $t("reset") }}
       </button>
 
-      <div class="rating-control">
-        <button
-          data-cy="sort-shows"
-          type="button"
-          class="sort"
-          @click="isSortDescending = !isSortDescending"
-        >
-          {{
-            $t("sortByRating", {
-              direction: isSortDescending ? "↑" : "↓",
-            })
-          }}
-        </button>
-      </div>
+      <button
+        data-cy="sort-shows"
+        type="button"
+        class="genre-control"
+        @click="isSortDescending = !isSortDescending"
+      >
+        {{
+          $t("sortByRating", {
+            direction: isSortDescending ? "↑" : "↓",
+          })
+        }}
+      </button>
     </section>
 
     <div class="show-cards-wrapper" key="active-show">
@@ -126,14 +124,15 @@ watch(userInput, (text) => {
   }
 }
 
-.genre-reset {
+.genre-control {
   display: block;
   margin-inline-start: auto;
-  margin-right: 1rem;
+  margin-inline-end: 1rem;
+  margin-block-end: 1rem;
 }
 
 .show-cards-title,
-genres-title {
+.genres-title {
   padding-inline-start: 1rem;
 }
 
