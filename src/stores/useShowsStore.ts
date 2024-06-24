@@ -9,7 +9,6 @@ export const useShowsStore = defineStore({
   id: "shows",
   persist: {
     storage: sessionStorage,
-    paths: ["shows", "genres"],
   },
   state: (): State => ({
     shows: undefined,
