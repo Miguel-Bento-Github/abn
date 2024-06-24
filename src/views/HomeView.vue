@@ -41,13 +41,6 @@ watch(userInput, (text) => {
 </script>
 
 <template>
-  <input
-    data-cy="show-filter"
-    class="show-filter"
-    type="text"
-    v-model="userInput"
-    placeholder="input show name here..."
-  />
   <div data-cy="home-content">
     <section>
       <h2 class="genres-title">{{ $t("genres") }}</h2>
@@ -61,23 +54,31 @@ watch(userInput, (text) => {
       >
         {{ $t("reset") }}
       </button>
-
-      <button
-        data-cy="sort-shows"
-        type="button"
-        class="genre-control"
-        @click="isSortDescending = !isSortDescending"
-      >
-        {{
-          $t("sortByRating", {
-            direction: isSortDescending ? "↑" : "↓",
-          })
-        }}
-      </button>
     </section>
 
     <div class="show-cards-wrapper" key="active-show">
       <h2 class="show-cards-title">{{ $t("shows") }}</h2>
+      <div class="shows-control">
+        <input
+          data-cy="show-filter"
+          class="show-filter"
+          type="text"
+          v-model="userInput"
+          placeholder="input show name here..."
+        />
+        <button
+          data-cy="sort-shows"
+          type="button"
+          class="genre-control"
+          @click="isSortDescending = !isSortDescending"
+        >
+          {{
+            $t("sortByRating", {
+              direction: isSortDescending ? "↑" : "↓",
+            })
+          }}
+        </button>
+      </div>
       <div class="show-cards">
         <TransitionGroup name="list">
           <ShowCard
@@ -95,6 +96,7 @@ watch(userInput, (text) => {
 <style lang="scss" scoped>
 .show-filter {
   padding: 0.5rem 1rem;
+  margin-inline-start: 1rem;
   border: 0;
   box-shadow: inset 2px 2px 4px #999;
   border-radius: 0.25rem;
@@ -105,6 +107,11 @@ watch(userInput, (text) => {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+}
+
+.shows-control {
+  display: flex;
+  align-items: center;
 }
 
 .genre-selection {
@@ -136,29 +143,8 @@ watch(userInput, (text) => {
   padding-inline-start: 1rem;
 }
 
-%curtain {
-  content: "";
-  position: absolute;
-  inset-block-start: 0;
-  width: 0.5rem;
-  height: 100%;
-  z-index: 1;
-}
-
 .show-cards-wrapper {
   position: relative;
-
-  &::after {
-    @extend %curtain;
-    inset-inline-start: 0;
-    background: linear-gradient(to left, transparent, #fff);
-  }
-
-  &::before {
-    @extend %curtain;
-    inset-inline-end: 0;
-    background: linear-gradient(to right, transparent, #fff);
-  }
 }
 
 .show-cards {

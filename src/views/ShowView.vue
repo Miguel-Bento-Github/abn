@@ -27,9 +27,9 @@ const ctas = [
 
 <template>
   <section class="show-section">
-    <h1 :id="show?.name" class="title" data-cy="show-title">
+    <h2 :id="show?.name" class="title" data-cy="show-title">
       {{ show?.name }}
-    </h1>
+    </h2>
     <div class="info-stats">
       <picture>
         <source
@@ -39,43 +39,47 @@ const ctas = [
         />
         <img class="show-image" :src="show?.image.original" :alt="show?.name" />
       </picture>
-      <p class="language" v-if="show?.language" data-cy="show-language">
-        {{ $t("language", { language: show?.language }) }}
-      </p>
-      <p class="runtime" v-if="show?.averageRuntime" data-cy="show-runtime">
-        {{ $t("runtime", { runtime: show?.averageRuntime }) }}
-      </p>
-      <div class="run">
-        <p class="premiered" v-if="show?.premiered" data-cy="show-premiered">
-          {{ $t("premiered", { premiered: show?.premiered }) }}
-        </p>
-        <p class="ended" v-if="show?.ended" data-cy="show-ended">
-          {{ $t("ended", { ended: show?.ended }) }}
-        </p>
-      </div>
-      <p
-        class="network"
-        v-if="show?.network?.name && show?.network?.country.name"
-        data-cy="show-country"
-      >
-        {{
-          $t("network", {
-            network: show?.network?.name,
-            country: show?.network?.country.name,
-          })
-        }}
-      </p>
-      <div data-cy="show-showtime">
-        {{ $t("showtime", { showtime: show?.schedule.time }) }}
 
-        <span v-for="(day, index) in show?.schedule.days" :key="day">
-          <span v-if="show?.schedule.days">
-            {{ day
-            }}{{ index === show?.schedule.days.length - 1 ? "" : ", " }}</span
-          >
-        </span>
+      <div class="stats-text">
+        <p class="language" v-if="show?.language" data-cy="show-language">
+          {{ $t("language", { language: show?.language }) }}
+        </p>
+        <p class="runtime" v-if="show?.averageRuntime" data-cy="show-runtime">
+          {{ $t("runtime", { runtime: show?.averageRuntime }) }}
+        </p>
+        <div class="run">
+          <p class="premiered" v-if="show?.premiered" data-cy="show-premiered">
+            {{ $t("premiered", { premiered: show?.premiered }) }}
+          </p>
+          <p class="ended" v-if="show?.ended" data-cy="show-ended">
+            {{ $t("ended", { ended: show?.ended }) }}
+          </p>
+        </div>
+        <p
+          class="network"
+          v-if="show?.network?.name && show?.network?.country.name"
+          data-cy="show-country"
+        >
+          {{
+            $t("network", {
+              network: show?.network?.name,
+              country: show?.network?.country.name,
+            })
+          }}
+        </p>
+        <div data-cy="show-showtime">
+          {{ $t("showtime", { showtime: show?.schedule.time }) }}
+
+          <span v-for="(day, index) in show?.schedule.days" :key="day">
+            <span v-if="show?.schedule.days">
+              {{ day
+              }}{{ index === show?.schedule.days.length - 1 ? "" : ", " }}</span
+            >
+          </span>
+        </div>
       </div>
     </div>
+
     <div class="info-core">
       <p
         class="summary"
@@ -109,8 +113,8 @@ const ctas = [
 
   @media screen and (min-width: 600px) {
     grid-template-areas:
-      "title title"
-      "core stats stats";
+      "title title title"
+      "core core stats";
   }
 }
 
@@ -119,6 +123,15 @@ const ctas = [
   grid-area: stats;
   padding: 1rem;
   border-radius: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+
+  @media screen and (min-width: 600px) {
+    flex-direction: row;
+  }
 }
 
 .info-core {
@@ -129,10 +142,14 @@ const ctas = [
 
 .title {
   grid-area: title;
+  padding-inline-start: 1rem;
 }
 
 .show-image {
   border-radius: 0.5rem;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
 }
 
 .external-links {

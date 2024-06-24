@@ -24,9 +24,9 @@ watch(isSuccess, () => {
 <template>
   <nav class="nav">
     <RouterLink :to="{ name: Route.Home }">{{ $t("home") }}</RouterLink>
+    <h1 data-cy="home-title" class="title">{{ $t("welcome") }}</h1>
     <LocaleChanger />
   </nav>
-  <h1 data-cy="home-title" class="title">{{ $t("welcome") }}</h1>
   <div :aria-busy="isLoading">
     <span key="loading" v-if="isLoading"> {{ $t("loading") }}</span>
     <div key="error" v-if="isError">{{ $t("error") }}</div>
@@ -44,8 +44,9 @@ watch(isSuccess, () => {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0.5rem 1rem;
-  background: #555;
+  background: #333;
   color: #f8f8f8;
   filter: drop-shadow(0.25rem 0 0.5rem #999);
 
@@ -55,10 +56,10 @@ watch(isSuccess, () => {
 }
 
 .title {
-  padding-block-start: 1rem;
+  font-size: medium;
 }
 
 .view {
-  padding-block-start: 0.5rem;
+  padding-block-start: 3rem;
 }
 </style>

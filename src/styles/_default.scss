@@ -2,7 +2,9 @@ body {
   font-family: Avenir, Verdana, Geneva, Tahoma, sans-serif;
   padding: 1rem;
   max-width: 1600px;
+  min-height: 100vh;
   margin: auto;
+  background-image: linear-gradient(to top, #d299c2ba 0%, #fef9d7b6 100%);
 }
 
 button,
