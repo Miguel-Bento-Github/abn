@@ -1,6 +1,7 @@
 import enJSON from "@/locales/en-US.json";
 import messages from "@intlify/unplugin-vue-i18n/messages";
-import { createI18n, IntlDateTimeFormat } from "vue-i18n";
+import { createI18n } from "vue-i18n";
+import type { IntlDateTimeFormat } from "vue-i18n";
 import { LOCALE, LocaleCode } from "@/const/locale";
 
 /**

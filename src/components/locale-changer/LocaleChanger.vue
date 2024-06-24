@@ -2,7 +2,8 @@
 import { LOCALE, LocaleCode } from "@/const/locale";
 import { setLocalStorageLocale } from "@/util/setLocalStorageLocale";
 import { setDocumentLang } from "@/util/setDocumentLang";
-import { Ref, watch } from "vue";
+import { watch } from "vue";
+import type { Ref } from "vue";
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 
