@@ -3,7 +3,7 @@ import GenreSelector from "@/components/genre-selector/GenreSelector.vue";
 import ShowCard from "@/components/show-card/ShowCard.vue";
 import type { APIResponse } from "@/services/http/types";
 import { useShowsStore } from "@/stores/useShowsStore";
-import { ref, watch, watchEffect } from "vue";
+import { reactive, ref, watch, watchEffect } from "vue";
 
 const isSortDescending = ref(false);
 const initialModelState: string[] = [];

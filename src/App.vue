@@ -11,6 +11,7 @@ const {
   isSuccess,
   isLoading,
   isError,
+  isFetched,
 } = useShowsQuery("shows?page=1");
 
 watch(isSuccess, () => {
@@ -29,7 +30,7 @@ watch(isSuccess, () => {
   <div :aria-busy="isLoading">
     <span key="loading" v-if="isLoading"> {{ $t("loading") }}</span>
     <div key="error" v-if="isError">{{ $t("error") }}</div>
-    <main class="view" v-else>
+    <main class="view" v-if="isFetched">
       <RouterView />
     </main>
   </div>

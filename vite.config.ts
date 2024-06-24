@@ -9,11 +9,7 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue({
-      script: {
-        defineModel: true,
-      },
-    }),
+    vue(),
     VueI18nPlugin({
       include: resolve(
         dirname(fileURLToPath(import.meta.url)),

@@ -13,5 +13,6 @@
   "premiered": "首播时间: {premiered}",
   "ended": "完结时间: {ended}",
   "network": "播出网络: {network} {country}",
-  "showtime": "播出时间: {showtime}"
+  "showtime": "播出时间: {showtime}",
+  "rating": "评分: 未评分 | 评分: {rating}"
 }
