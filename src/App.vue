@@ -26,7 +26,7 @@ watch(isSuccess, () => {
     <RouterLink :to="{ name: Route.Home }">{{ $t("home") }}</RouterLink>
     <LocaleChanger />
   </nav>
-  <h1 class="title">{{ $t("welcome") }}</h1>
+  <h1 data-cy="home-title" class="title">{{ $t("welcome") }}</h1>
   <div :aria-busy="isLoading">
     <span key="loading" v-if="isLoading"> {{ $t("loading") }}</span>
     <div key="error" v-if="isError">{{ $t("error") }}</div>

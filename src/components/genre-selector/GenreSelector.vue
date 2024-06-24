@@ -6,7 +6,7 @@ const genresModel = defineModel();
 </script>
 
 <template>
-  <div class="genre-selection">
+  <div data-cy="genre-selection" class="genre-selection">
     <label v-for="genre in showsStore.genres" :key="genre" :for="genre">
       <input
         type="checkbox"

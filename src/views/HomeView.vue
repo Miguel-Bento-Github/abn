@@ -3,7 +3,7 @@ import GenreSelector from "@/components/genre-selector/GenreSelector.vue";
 import ShowCard from "@/components/show-card/ShowCard.vue";
 import type { APIResponse } from "@/services/http/types";
 import { useShowsStore } from "@/stores/useShowsStore";
-import { reactive, ref, watch, watchEffect } from "vue";
+import { ref, watch, watchEffect } from "vue";
 
 const isSortDescending = ref(false);
 const initialModelState: string[] = [];
@@ -42,6 +42,7 @@ watch(userInput, (text) => {
 
 <template>
   <input
+    data-cy="show-filter"
     class="show-filter"
     type="text"
     v-model="userInput"
@@ -52,12 +53,18 @@ watch(userInput, (text) => {
       <h2 class="genres-title">{{ $t("genres") }}</h2>
       <GenreSelector v-model="genresModel" />
 
-      <button type="button" class="genre-reset" @click="resetGenresModel()">
+      <button
+        type="button"
+        class="genre-reset"
+        data-cy="genre-reset"
+        @click="resetGenresModel()"
+      >
         {{ $t("reset") }}
       </button>
 
       <div class="rating-control">
         <button
+          data-cy="sort-shows"
           type="button"
           class="sort"
           @click="isSortDescending = !isSortDescending"
@@ -76,6 +83,7 @@ watch(userInput, (text) => {
       <div class="show-cards">
         <TransitionGroup name="list">
           <ShowCard
+            data-cy="show-card"
             :show="activeShow"
             v-for="activeShow in activeShows"
             :key="activeShow.id"

@@ -27,29 +27,36 @@ const ctas = [
 
 <template>
   <section class="show-section">
-    <h1 :id="show?.name" class="title">{{ show?.name }}</h1>
+    <h1 :id="show?.name" class="title" data-cy="show-title">
+      {{ show?.name }}
+    </h1>
     <div class="info-stats">
       <picture>
-        <source :srcset="show?.image.medium" media="(orientation: portrait)" />
+        <source
+          :srcset="show?.image.medium"
+          media="(orientation: portrait)"
+          data-cy="show-image"
+        />
         <img class="show-image" :src="show?.image.original" :alt="show?.name" />
       </picture>
-      <p class="language" v-if="show?.language">
+      <p class="language" v-if="show?.language" data-cy="show-language">
         {{ $t("language", { language: show?.language }) }}
       </p>
-      <p class="runtime" v-if="show?.averageRuntime">
+      <p class="runtime" v-if="show?.averageRuntime" data-cy="show-runtime">
         {{ $t("runtime", { runtime: show?.averageRuntime }) }}
       </p>
       <div class="run">
-        <p class="premiered" v-if="show?.premiered">
+        <p class="premiered" v-if="show?.premiered" data-cy="show-premiered">
           {{ $t("premiered", { premiered: show?.premiered }) }}
         </p>
-        <p class="ended" v-if="show?.ended">
+        <p class="ended" v-if="show?.ended" data-cy="show-ended">
           {{ $t("ended", { ended: show?.ended }) }}
         </p>
       </div>
       <p
         class="network"
         v-if="show?.network?.name && show?.network?.country.name"
+        data-cy="show-country"
       >
         {{
           $t("network", {
@@ -58,7 +65,7 @@ const ctas = [
           })
         }}
       </p>
-      <div>
+      <div data-cy="show-showtime">
         {{ $t("showtime", { showtime: show?.schedule.time }) }}
         <span v-for="(day, index) in show?.schedule.days" :key="day">
           {{ day }}
@@ -67,7 +74,12 @@ const ctas = [
       </div>
     </div>
     <div class="info-core">
-      <p class="summary" v-if="show?.summary" v-html="show?.summary" />
+      <p
+        class="summary"
+        v-if="show?.summary"
+        v-html="show?.summary"
+        data-cy="show-summary"
+      />
       <div class="external-links">
         <a
           class="cta"
